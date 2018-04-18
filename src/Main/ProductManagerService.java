@@ -1,66 +1,74 @@
-import jdk.nashorn.internal.objects.annotations.Getter;
-import javax.annotation.PostConstruct;
-import javax.inject.Singleton;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+
 
 //DIFERENCIA ENTRE POST Y GET
 //POST, cuando haces algo (modifico algo del programa) y GET cuando solo das algo (pides)
 
-@Path("/pedidos") //Como lllamar path == URL
-@Singleton
-public class ProductManagerRest {
+@Path("pedidos") //Como llamar path == URL
+//@Singleton
+public class ProductManagerService {
     ProductManagerImplemets pm = ProductManagerImplemets.getInstance();
+        /**
+        * Method handling HTTP GET requests. The returned object will be sent
+        * to the client as "text/plain" media type.
+        * @return String that will be returned as a text/plain response.
+        */
+//Test de los productos
     //Comprovacion de funcionamiento
+    @Path("basic")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String getIt() {
         return "Got it!";
     }
-    //Registro de Usuario
-    @POST
-    @Path("/CrearUsuario")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Usuario crearUsuario(Usuario usuario) {
-        return pm.login(usuario);
-    }
 
+    //Registro de Usuario
+    @Path("crearUsuario/{usuario}")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+     public Usuario crearUsuario(@PathParam("usuario") Usuario usuario) {
+        return pm.getInstance().login(usuario);
+    }
     //Listado de producto por precio
+    @Path("listaProductosPrecio")
     @GET
-    @Path("/listaProductosPrecio")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Producto> listaProductoPrecio(){
         return pm.getListaDeProductosPorPrecio();
     }
     //Realizar Pedido
     @POST
-    @Path("/{ID}/RealizarPedido")
+    @Path("RealizarPedido/{ID}")
     @Consumes(MediaType.APPLICATION_JSON)
     public boolean realizarPedido(@PathParam("ID") int userID, List<Producto> productos){//como recoge los productos
-        return pm.hacerPedido(userID,productos);
+        return pm.getInstance().hacerPedido(userID,productos);
     }
     //Servir Pedido
-    @GET
     @Path("/ServirPedido")
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
     public boolean servirPedido(){
         return pm.servirPedido();
     }
     //Listado de pedidos de un usuarios
+    @Path("listaPedidosUsuario/{ID}")
     @GET
-    @Path("/{ID}/listaPedidosUsuario")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Pedido> listaPedidosUsuario(@PathParam("ID") int userID){
         return pm.getPedidosUsuario(userID);
     }
     //Lista de producto por venta
+    @Path("listaProductoVentas")
     @GET
-    @Path("/listaProductoVentas")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Producto> listaProductoVentas(){
         return pm.getProductoVentas();
     }
-
-
 }

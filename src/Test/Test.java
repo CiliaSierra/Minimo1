@@ -69,13 +69,13 @@ public class Test {//inicializo valores y invoco a los metodos para comprovar su
     //test para realizar un pedido
     @org.junit.Test
     public void hacerPedido(){
-        logger.info("test.java.Test para realizar el pedido");
+        logger.info("Test: Realizar Pedido de " +u1.getUser() );
         Assert.assertTrue(pm.getInstance().hacerPedido(u1.getIdUser(), pro1));//si el boolean de respuesta es true
-    }
+        }
     //test para sevir el pedido
     @org.junit.Test
     public void servirPedido(){
-        logger.info("test.java.Test para servir el pedido");
+        logger.info("Test: Servir Pedido de " +u2.getUser());
         pm.getInstance().hacerPedido(u2.getIdUser(),pro2);
         pm.getInstance().servirPedido();
         Assert.assertEquals(0,pm.getInstance().getPedidos().size());//Me aseguro de que el pedido sea eliminado de la cola del pedidos servidos

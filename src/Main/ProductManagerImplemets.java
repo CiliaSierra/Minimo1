@@ -25,12 +25,11 @@ public class ProductManagerImplemets implements ProductManager {
     public Queue<Pedido> getPedidos() {
         return pedidos;
     }
-
     public List<Pedido> getServirPedidios() {
         return servirPedidios;
     }
 
-    //Funciones pricipales
+    //Funciones pricipales (publicas, se accede a ellas desde el Test)
     //Lista de productos oredenados por precio
     public List<Producto> getListaDeProductosPorPrecio() {
         logger.info("Productos servidos por coste");
@@ -38,15 +37,14 @@ public class ProductManagerImplemets implements ProductManager {
     }
    //Hacer un pedido
     public boolean hacerPedido (int userId, List<Producto> producto) {
-        logger.info("Hacer Pedido");
+        logger.info("Hacer Pedido del usuario "+userId);
         this.pedidos.add(new Pedido(producto, userId, false));
-        logger.info("Hecha ");
+        logger.info("Pedido del usuario" +userId+" hecho");
         return true;
     }
-    //servir un pedido
+    //Servir un pedido
     public boolean servirPedido() {
         logger.info("Servir Pedido");
-
         if(!pedidos.isEmpty()) { //si hay pedidos en la cola
             this.servirPedidios.add(this.pedidos.element()); //guardar en la lista de pedidos hechos
             this.pedidos.remove(); //eliminar de la cola
@@ -58,31 +56,31 @@ public class ProductManagerImplemets implements ProductManager {
             return false;
         }
     }
-    //lista de pedidos hechos por un Usuario
+    //Lista de pedidos servidos a un Usuario
     public List<Pedido> getPedidosUsuario(int userId) {
         List<Pedido> pedidos = new ArrayList<>();
         if (colaUsuarios(userId)) {//si hay pedios del usuario en cola
-            logger.info("Pedidos hecho por el usuario");
+            logger.info("Pedidos hecho por el usuario" +userId);
             for(Pedido o : this.servirPedidios) {
                 if (o.getUserID() == userId)
                     pedidos.add(o);
             }
-            logger.info("Los pedidos hecho son:");
+            logger.info("Los pedidos hechos al ususario" +userId+" son:");
             return pedidos;
         }
         else {
-            logger.warning("No hay hecho pedidos ");
+            logger.warning("El ususario " +userId+ " no ha hecho pedido");
             return pedidos;
         }
     }
-    //lista de productos servidos ordenados por venta
+    //Lista de productos servidos ordenados por venta
     public List<Producto> getProductoVentas() {
         if (!servirPedidios.isEmpty()) {//si hay pedidios servidos
-            logger.info("Los productos son:");
+            logger.info("Los productos oredenados por ventas son:");
             return ProductosPorVenta(getPedidosServidos());
         }
         else {
-            logger.warning("No has productos vendidos");
+            logger.warning("No se han vendidos productos");
             return null;
         }
 
@@ -91,7 +89,7 @@ public class ProductManagerImplemets implements ProductManager {
     //Funciones secundarias (Privadas)
     //Me ordena los productos por Coste
     private List<Producto> ProductosPorCoste(List<Producto> producto) {
-        producto.sort(Comparator.comparing(Producto::getPrecio));
+        producto.sort(Comparator.comparing(Producto::getPrecio)); //Comparacion del coste de los productos
         return producto;
     }
     //me dice si mi Usuario ha hecho pedidos o no
@@ -126,21 +124,21 @@ public class ProductManagerImplemets implements ProductManager {
         }
         if (result < 0) { //HAY MAS REFRESCOS
             for (Producto p : producto) {
-                if(!(pro.contains(p)) && p.getProducto() =="Refresco")
+                if(!(pro.contains(p)) && p.getProducto().equals("Refresco"))
                     pro.add(p);
             }
             for (Producto p : producto) {
-                if(!(pro.contains(p)) && p.getProducto() =="Bocadillo")
+                if(!(pro.contains(p)) && p.getProducto().equals("Bocadillo"))
                     pro.add(p);
             }
         }
         if (result > 0) { //HAY MAS BOCATAS
             for (Producto p : producto) {
-                if(!(pro.contains(p)) && p.getProducto() =="Bocadillo")
+                if(!(pro.contains(p)) && p.getProducto().equals("Bocadillo"))
                     pro.add(p);
             }
             for (Producto p : producto) {
-                if(!(pro.contains(p)) && p.getProducto() =="Refresco")
+                if(!(pro.contains(p)) && p.getProducto().equals("Refresco"))
                     pro.add(p);
             }
         }
